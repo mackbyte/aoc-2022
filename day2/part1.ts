@@ -1,13 +1,13 @@
 import {getInputLines} from "../common/inputUtils";
 
-enum Shape {
+export enum Shape {
     ROCK = 1,
     PAPER = 2,
     SCISSORS = 3,
     UNKNOWN = 9
 }
 
-function getShape(code: string): Shape {
+export function getShape(code: string): Shape {
     if (code === "A" || code === "X") {
         return Shape.ROCK;
     } else if (code === "B" || code === "Y") {
@@ -19,7 +19,7 @@ function getShape(code: string): Shape {
     return Shape.UNKNOWN;
 }
 
-function calculateRoundScore(opponentShape: Shape, myShape: Shape) {
+export function calculateRoundScore(opponentShape: Shape, myShape: Shape) {
     if (opponentShape === myShape) {
         // draw
         return 3 + myShape;
