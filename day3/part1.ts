@@ -9,7 +9,7 @@ function findCommonItem(rucksack: string) {
 
 // A-Z 65-90
 // a-z 97-122
-function getPriorityForItem(item: string) {
+export function getPriorityForItem(item: string) {
     const charCode = item.charCodeAt(0);
     if (charCode < 91) {
         return charCode - 38; // map 65-90 to 27-52
@@ -22,5 +22,5 @@ export default function part1(): number {
 
     return rucksacks.map(rucksack => findCommonItem(rucksack))
         .map(item => getPriorityForItem(item))
-        .reduce((total, current) => total + current, 0)
+        .reduce((total, current) => total + current, 0);
 }
