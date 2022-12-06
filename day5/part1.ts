@@ -1,6 +1,6 @@
 import {getInputSplitByBlankLines} from "../common/inputUtils";
 
-class Stack {
+export class Stack {
     id: number
     containers: string[] = []
 
@@ -21,7 +21,7 @@ class Stack {
     }
 }
 
-function createStacks(stacksConfig: string): Stack[] {
+export function createStacks(stacksConfig: string): Stack[] {
     const stacksConfigLines = stacksConfig.split('\n').reverse(); // reverse to have stacks from bottom to top
     const stacks: Stack[] = stacksConfigLines.shift()!.trim().split('   ').map(stackId => new Stack(parseInt(stackId)));
 
@@ -38,7 +38,7 @@ function createStacks(stacksConfig: string): Stack[] {
     return stacks;
 }
 
-const instructionRegex = /move (\d+) from (\d+) to (\d+)/
+export const instructionRegex = /move (\d+) from (\d+) to (\d+)/
 
 function processInstructions(stacks: Stack[], instructions: string) {
     const instructionList = instructions.split('\n');
