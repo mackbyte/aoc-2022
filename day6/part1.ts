@@ -1,11 +1,10 @@
 import {getInputLines} from "../common/inputUtils";
 
-export default function part1(): number {
-    const stream = getInputLines(6)[0];
-    let index = 4;
+export function findEndOfFirstSetOfUniqueCharacters(stream: string, numUniqueChars: number): number {
+    let index = numUniqueChars;
 
     while(index < stream.length) {
-        if(new Set(stream.substring(index-4, index).split('')).size == 4) {
+        if(new Set(stream.substring(index-numUniqueChars, index).split('')).size == numUniqueChars) {
             return index;
         }
 
@@ -13,4 +12,9 @@ export default function part1(): number {
     }
 
     return index;
+}
+
+export default function part1(): number {
+    const stream = getInputLines(6)[0];
+    return findEndOfFirstSetOfUniqueCharacters(stream, 4);
 }
