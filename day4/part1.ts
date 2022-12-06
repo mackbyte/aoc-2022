@@ -1,13 +1,13 @@
 import {getInputLines} from "../common/inputUtils";
 
-type Range = {
+export type Range = {
     start: number
     end: number
 }
 
 const rangesRegex = /(\d+)-(\d+),(\d+)-(\d+)/
 
-function getRangesFromLine(line: string): Range[] {
+export function getRangesFromLine(line: string): Range[] {
     let match = line.match(rangesRegex);
     if(match) {
         const first: Range = {start: parseInt(match[1]), end: parseInt(match[2])}
