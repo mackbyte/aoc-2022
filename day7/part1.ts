@@ -14,19 +14,7 @@ interface Directory {
 
 const changeDirectoryRegex = /\$ cd (.+)/
 
-function calculateDirectorySize(sizes: any, path: string, directory: Directory) {
-    let size = directory.files.reduce((total, file) => total + file.size, 0);
-    if(directory.directories.length > 0) {
-        directory.directories.forEach(directory => {
-            size += calculateDirectorySize(sizes, `${path}/${directory.name}`, directory)
-        });
-    }
-    sizes[path] = size;
-    return size;
-}
-
-export default function part1(): number | string {
-    const instructions = getInputLines(7);
+export function constructDirectoryTree(instructions: string[]): Directory {
     const root: Directory = { name: "/", parent: null, directories: [], files: []}
     let currentDirectory: Directory = root;
 
@@ -56,9 +44,28 @@ export default function part1(): number | string {
         }
     });
 
+    return root;
+}
+
+export function calculateDirectorySize(sizes: any, path: string, directory: Directory) {
+    let size = directory.files.reduce((total, file) => total + file.size, 0);
+    if(directory.directories.length > 0) {
+        directory.directories.forEach(directory => {
+            size += calculateDirectorySize(sizes, `${path}/${directory.name}`, directory)
+        });
+    }
+    sizes[path] = size;
+    return size;
+}
+
+export default function part1(): number | string {
+    const instructions = getInputLines(7);
+    const root = constructDirectoryTree(instructions);
+
     const directorySizes = {}
     calculateDirectorySize(directorySizes, "/", root);
 
-    return Object.values<number>(directorySizes).filter(size => size <= 100000)
+    return Object.values<number>(directorySizes)
+        .filter(size => size <= 100000)
         .reduce((total, current) => total + current, 0);
 }
