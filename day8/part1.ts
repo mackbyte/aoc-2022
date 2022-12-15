@@ -16,15 +16,21 @@ function printTrees(width: number, height: number, trees: Map<string, boolean>) 
     return output.join("\n");
 }
 
-export default function part1(): number | string {
-    const treeLines = getInputLines(8);
+export function constructTreeGrid(treeLines: string[]): number[][] {
     const trees: number[][] = [];
-    const visibleTreesCoordinates: Map<string, boolean> = new Map<string, boolean>();
 
     treeLines.map(treeLine => {
         let treeRow = treeLine.split("").map(tree => parseInt(tree));
         trees.push(treeRow)
     });
+
+    return trees;
+}
+
+export default function part1(): number | string {
+    const treeLines = getInputLines(8);
+    const visibleTreesCoordinates: Map<string, boolean> = new Map<string, boolean>();
+    const trees: number[][] = constructTreeGrid(treeLines);
 
     // scan top
     trees[0].forEach((treeHeight, column) => {
