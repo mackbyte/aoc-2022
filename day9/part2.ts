@@ -1,32 +1,5 @@
 import {getInputLines} from "../common/inputUtils";
-
-export enum Direction {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-}
-
-export function getDirection(symbol: string): Direction {
-    if(symbol === "U") {
-        return Direction.UP;
-    } else if (symbol === "D") {
-        return  Direction.DOWN;
-    } else if (symbol === "L") {
-        return  Direction.LEFT
-    } else {
-        return Direction.RIGHT;
-    }
-}
-
-export type Position = {
-    x: number,
-    y: number
-}
-
-export function positionToString(pos: Position): string {
-    return `${pos.x}-${pos.y}`
-}
+import {Direction, getDirection, Position, positionToString} from "./part1";
 
 function updateTailPosition(tail: Position, head: Position): Position {
     let xDiff = Math.abs(tail.x-head.x);
@@ -50,24 +23,28 @@ function updateTailPosition(tail: Position, head: Position): Position {
             return tail;
         }
     } else {
-        if(xDiff === 1) {
+        if(xDiff === 1 && yDiff === 2) {
             return {
                 x: head.x,
                 y: tail.y + ((head.y-tail.y) * 0.5)
             }
-        } else {
+        } else if(yDiff === 1 && xDiff === 2) {
             return {
                 x: tail.x + ((head.x-tail.x) * 0.5),
                 y: head.y
+            }
+        } else {
+            return {
+                x: tail.x + ((head.x-tail.x) * 0.5),
+                y: tail.y + ((head.y-tail.y) * 0.5)
             }
         }
     }
 }
 
-export default function part1(): number | string {
+export default function part2(): number | string {
     const instructions = getInputLines(9);
-    let head: Position = {x: 0, y: 0};
-    let tail: Position = {x: 0, y: 0};
+    let parts: Position[] = new Array(10).fill(null).map(() => ({x: 0, y: 0}));
     let positions: Map<string, number> = new Map<string, number>();
 
     instructions.forEach(instruction => {
@@ -77,30 +54,38 @@ export default function part1(): number | string {
 
         if(direction === Direction.UP) {
             for(let i = 0; i < value; i++) {
-                head.y += 1;
-                tail = updateTailPosition(tail, head);
-                let positionKey = positionToString(tail);
+                parts[0].y += 1;
+                for(let j = 1; j < parts.length; j++) {
+                    parts[j] = updateTailPosition(parts[j], parts[j-1]);
+                }
+                let positionKey = positionToString(parts[parts.length-1]);
                 positions.set(positionKey, (positions.get(positionKey) || 0) + 1);
             }
         } else if (direction === Direction.DOWN) {
             for(let i = 0; i < value; i++) {
-                head.y -= 1;
-                tail = updateTailPosition(tail, head);
-                let positionKey = positionToString(tail);
+                parts[0].y -= 1;
+                for(let j = 1; j < parts.length; j++) {
+                    parts[j] = updateTailPosition(parts[j], parts[j-1]);
+                }
+                let positionKey = positionToString(parts[parts.length-1]);
                 positions.set(positionKey, (positions.get(positionKey) || 0) + 1);
             }
         } else if (direction === Direction.LEFT) {
             for(let i = 0; i < value; i++) {
-                head.x -= 1;
-                tail = updateTailPosition(tail, head);
-                let positionKey = positionToString(tail);
+                parts[0].x -= 1;
+                for(let j = 1; j < parts.length; j++) {
+                    parts[j] = updateTailPosition(parts[j], parts[j-1]);
+                }
+                let positionKey = positionToString(parts[parts.length-1]);
                 positions.set(positionKey, (positions.get(positionKey) || 0) + 1);
             }
         } else {
             for(let i = 0; i < value; i++) {
-                head.x += 1;
-                tail = updateTailPosition(tail, head);
-                let positionKey = positionToString(tail);
+                parts[0].x += 1;
+                for(let j = 1; j < parts.length; j++) {
+                    parts[j] = updateTailPosition(parts[j], parts[j-1]);
+                }
+                let positionKey = positionToString(parts[parts.length-1]);
                 positions.set(positionKey, (positions.get(positionKey) || 0) + 1);
             }
         }
